@@ -6,11 +6,17 @@ import { FaEyeSlash } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { signInFailure, signInStart, signInSuccess } from "../redux/slices/userSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { Spinner } from "@material-tailwind/react";
 
 function SignIn() {
   
   const [showPassword, setShowPassword] = useState(false);
   const [ formData, setFormData ] = useState({});
+
+  const { loading } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -26,6 +32,7 @@ function SignIn() {
       toast.error('please fill all the fields');
     }
     try {
+      dispatch(signInStart());
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -34,17 +41,23 @@ function SignIn() {
       const data = await res.json();
       if (data.success === false) {
         toast.error(data.message);
+        dispatch(signInFailure(data.message));
         return;
       }
 
       if (res.ok) {
+        dispatch(signInSuccess(data));
         toast.success('Sign In success');
         setTimeout(() => {
           navigate('/');
         }, 1500);
       }
+      else {
+        dispatch(signInFailure(data.message));
+      }
     } catch (error) {
       toast.error('An error occurred: ' + error.message);
+      dispatch(signInFailure(error.message));
     }
    }
 
@@ -96,8 +109,15 @@ function SignIn() {
                 required
               />
             </div>
-            <Button type="submit" className="mt-6 hover:bg-gray-800" fullWidth>
-              sign in
+            <Button type="submit" className="mt-6 hover:bg-gray-800" fullWidth disabled={loading}>
+            {loading ? (
+                <>
+                  <Spinner className="h-4 w-4" />
+                  <span className='pl-3'>Loading...</span>
+                </>
+              ) : (
+                'Sign In'
+              )}
             </Button>
             <Typography color="gray" className=" font-normal text-sm mt-1">
               <Link to={'/forgot-password'} className="text-blue-300 underline">
