@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+
+* {
+  font-family: 'Rosemary', sans-serif;
+}
 body {
   @apply bg-gray-50
+}
+
+.slick-slide > div {
+  margin: 0 30px;
 }

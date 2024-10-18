@@ -5,6 +5,7 @@ import {
   Checkbox,
   Button,
   Typography,
+  Spinner
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -13,10 +14,12 @@ import userIcon from '../assets/userIcon.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import OAuth from "../components/OAuth";
 
 function SignUp() {
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [imageFile, setImageFile] = useState(null)
   const [imageFileUrl, setImageFileUrl] = useState(null);
@@ -56,6 +59,7 @@ function SignUp() {
     console.log(formData);
   
     try {
+      setLoading(true);
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -74,7 +78,8 @@ function SignUp() {
         toast.error(responseData.message);
         return;
       }
-  
+      setLoading(false);
+
       if (res.ok) {
         toast.success('Registered successfully! Redirecting to sign-in...');
         setTimeout(() => {
@@ -84,6 +89,7 @@ function SignUp() {
     } catch (error) {
       //console.error('Error:', error.message);
       toast.error('An error occurred: ' + error.message);
+      setLoading(false);
     }
    };
   
@@ -220,9 +226,17 @@ function SignUp() {
               }
               containerProps={{ className: "-ml-2.5" }}
             />
-            <Button type="submit" className="mt-3 hover:bg-blue-gray-900" fullWidth disabled={!isCheckboxChecked}>
-              sign up
+            <Button type="submit" className="mt-3 hover:bg-blue-gray-900" fullWidth disabled={!isCheckboxChecked || loading}>
+            {loading ? (
+                <>
+                  <Spinner size='h-4 w-4' />
+                  <span className='pl-3'>Loading...</span>
+                </>
+              ) : (
+                'Sign Up'
+              )}
             </Button>
+            <OAuth/>
             <Typography color="gray" className="font-normal">
               Already have an account?{" "}
               <Link to="/sign-in" className="font-medium text-gray-900">

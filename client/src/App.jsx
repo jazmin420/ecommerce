@@ -9,6 +9,7 @@ import SignIn from './pages/SignIn'
 import ForgotPassword from './pages/ForgotPassword'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import ProductDetail from './pages/ProductDetail'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
         <Route path='/sign-in' element={<SignIn/>}></Route>
         <Route path='/sign-up' element={<SignUp/>}></Route>
         <Route path='/forgot-password' element={<ForgotPassword/>}></Route>
+        <Route path="/shop/:category/:subcategory/:productId" element={<ProductDetail />} />
        </Routes>
      <Footer/>
      </BrowserRouter>

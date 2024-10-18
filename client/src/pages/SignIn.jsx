@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { signInFailure, signInStart, signInSuccess } from "../redux/slices/userSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from "@material-tailwind/react";
+import OAuth from '../components/OAuth'
 
 function SignIn() {
   
@@ -119,6 +120,7 @@ function SignIn() {
                 'Sign In'
               )}
             </Button>
+            <OAuth/>
             <Typography color="gray" className=" font-normal text-sm mt-1">
               <Link to={'/forgot-password'} className="text-blue-300 underline">
                 Forgot Password?
