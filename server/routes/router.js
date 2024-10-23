@@ -1,20 +1,17 @@
-const express = require('express');
-const { test } = require('../controllers/test');
-const { signUp, signin } = require('../controllers/userController');
+import express from 'express';
+import { test } from '../controllers/test.js';
+import { signUp, signin } from '../controllers/userController.js';
 
 const router = express.Router();
 
-//test
+// Test
 router.get('/test', test);
 
-            //user routes
-//user signup
-router.post('/api/auth/signup', signUp)
+                     // User routes
+// User signup
+router.post('/api/auth/signup', signUp);
 
-//signin
-router.post('/api/auth/signin', signin)
+// User signin
+router.post('/api/auth/signin', signin);
 
-
-
-
-module.exports = router;
+export default router;

@@ -15,6 +15,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import OAuth from "../components/OAuth";
+import { signUpUser } from "../redux/slices/userSlice";
+import { useDispatch } from 'react-redux';
 
 function SignUp() {
 
@@ -24,8 +26,10 @@ function SignUp() {
   const [imageFile, setImageFile] = useState(null)
   const [imageFileUrl, setImageFileUrl] = useState(null);
 
+
   const filePickerRef = useRef();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
 
   const handleCheckboxChange = (e) => {
@@ -51,47 +55,31 @@ function SignUp() {
 
 
   const onSubmit = async (data) => {
-
     const formData = {
       ...data,
       profilePicture: imageFileUrl,
     };
-    console.log(formData);
+    //console.log(formData);
   
     try {
       setLoading(true);
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      const resultAction = await dispatch(signUpUser(formData));
   
-      const responseData = await res.json();
-      //console.log('Response Data:', responseData);
-  
-      if (res.status === 400) {
-        toast.error(responseData.message || 'Bad Request');
-        return;
-      }
-  
-      if (responseData.success === false) {
-        toast.error(responseData.message);
-        return;
-      }
-      setLoading(false);
-
-      if (res.ok) {
+      if (signUpUser.fulfilled.match(resultAction)) {
         toast.success('Registered successfully! Redirecting to sign-in...');
         setTimeout(() => {
           navigate('/sign-in');
         }, 1500);
+      } else {
+        toast.error(resultAction.payload); 
       }
     } catch (error) {
-      //console.error('Error:', error.message);
-      toast.error('An error occurred: ' + error.message);
+      toast.error(error);
+    } finally {
       setLoading(false);
     }
-   };
+  };
+  
   
 
   return (

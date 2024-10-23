@@ -27,7 +27,9 @@ function Explore() {
       <div  ref={divRef} className="w-1/2 p-12">
         <h1 className="text-6xl font-bold my-3">FIND CLOTHES THAT MATCHES YOUR STYLE</h1>
         <p className='text-gray-500 my-3'>Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.</p>
-        <Link to={'/shop'}><Button variant="filled" className='rounded-full'>Shop Now</Button></Link>
+        <Link to={'/shop'}>
+        {/* <Button variant="filled" className='rounded-full'>Shop Now</Button> */}
+        </Link>
       
       <div className='flex justify-between items-center my-6 flex-wrap'>
         <div>

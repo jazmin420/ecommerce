@@ -7,9 +7,13 @@ import { FaCartPlus } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { Badge } from "@material-tailwind/react";
 import { Button } from "@material-tailwind/react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+
 
 function Header() {
+  const location = useLocation();
+
+  const isAdminRoute = location.pathname.startsWith('/admin')
   return (
     <>
     <header className='h-16 shadow-md bg-white'>
@@ -19,25 +23,31 @@ function Header() {
           <img className='w-[200px]' src={logo} alt="ecommerce logo" />
           </Link>
         </div>
-        <div className="hidden lg:flex w-72">
-          <Input icon={<FaSearch/>} label="Search for products here" />
-        </div>
-        <div className='flex justify-end text-2xl items-center cursor-pointer gap-x-4'>
-          <FaRegHeart /> 
-        <Badge content="5">
-          <FaCartPlus />
-        </Badge>
-          <div className='flex justify-end'>
-            <FaUserCircle className='text-3xl'/>
-          </div>
-          <div>
-        <Link to='/sign-in'>
-          <Button className='rounded hover:bg-blue-gray-900'>
-            Sign In
-          </Button>
-        </Link>
-        </div>
-        </div>
+        { !isAdminRoute && (
+          <>
+            <div className="hidden lg:flex w-72">
+              <Input icon={<FaSearch/>} label="Search for products here" />
+            </div>
+            <div className='flex justify-end text-2xl items-center cursor-pointer gap-x-4'>
+              <FaRegHeart /> 
+            <Badge content="5">
+              <FaCartPlus />
+            </Badge>
+              <div className='flex justify-end'>
+                <FaUserCircle className='text-3xl'/>
+              </div>
+              <div>
+            <Link to='/sign-in'>
+              <Button variant='filled'
+              className='rounded hover:bg-blue-gray-900'
+              >
+                Sign In
+              </Button>
+            </Link>
+            </div>
+            </div>
+          </>
+        )}
       </div>
     </header>
     </>

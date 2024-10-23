@@ -1,3 +1,5 @@
-exports.test = (req,res) => {
-  res.json('API is working!!!')
-}
+// controllers/test.js
+
+export const test = (req, res) => {
+  res.json('API is working!!!');
+};

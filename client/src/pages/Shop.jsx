@@ -12,11 +12,9 @@ function Shop() {
         </ul>
       </nav>
       <h1>Shop Page</h1>
-      {/* Here you will include components for categories like "Men", "Women", etc. */}
       <div>
         <h2>Categories</h2>
         <Link to="/shop/men">Men</Link>
-        {/* Add more categories as needed */}
       </div>
     </div>
   );

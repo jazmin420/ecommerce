@@ -6,15 +6,15 @@ import { FaEyeSlash } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { signInFailure, signInStart, signInSuccess } from "../redux/slices/userSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from "@material-tailwind/react";
 import OAuth from '../components/OAuth'
+import { signInUser } from "../redux/slices/userSlice";
 
 function SignIn() {
   
   const [showPassword, setShowPassword] = useState(false);
-  const [ formData, setFormData ] = useState({});
+  const [formData, setFormData] = useState({ email: '', password: '' });
 
   const { loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -28,37 +28,21 @@ function SignIn() {
 
    const handleSubmit = async (e) => {
     e.preventDefault();
+    const { email, password } = formData;
     
-    if (!formData.email || !formData.password) {
+    if (!email || !password) {
       toast.error('please fill all the fields');
+      return;
     }
     try {
-      dispatch(signInStart());
-      const res = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (data.success === false) {
-        toast.error(data.message);
-        dispatch(signInFailure(data.message));
-        return;
-      }
-
-      if (res.ok) {
-        dispatch(signInSuccess(data));
-        toast.success('Sign In success');
-        setTimeout(() => {
-          navigate('/');
-        }, 1500);
-      }
-      else {
-        dispatch(signInFailure(data.message));
-      }
+      const data = await dispatch(signInUser(formData)).unwrap();
+      toast.dismiss();
+      toast.success('Sign In successful');
+      setTimeout(() => {
+        navigate('/shop/home');
+      }, 1500);
     } catch (error) {
-      toast.error('An error occurred: ' + error.message);
-      dispatch(signInFailure(error.message));
+      toast.error(error);
     }
    }
 
